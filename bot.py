@@ -41,18 +41,18 @@ api = tradeapi.REST(key_id=config.KEY, secret_key=config.SECRET)
 
 market_data = api.get_bars(symbol, tradeapi.TimeFrame.Minute).df
 #print(market_data.shape[0])
-# Get close list of the last 5 data points
-close_list  = market_data.tail(5)['close'].values
-close_list = np.array(close_list, dtype=np.float64) # Convert to numpy array
-ma = np.mean(close_list)
-last_price = close_list[4] # Most recent closing price
-print(market_data)
-print(close_list)
-print("Moving Average: " + str(ma))
-print("Last Price: " + str(last_price))
 
 
 while True:
+    # Get close list of the last 5 data points
+    close_list  = market_data.tail(5)['close'].values
+    close_list = np.array(close_list, dtype=np.float64) # Convert to numpy array
+    ma = np.mean(close_list)
+    last_price = close_list[4] # Most recent closing price
+    print(market_data)
+    print(close_list)
+    print("Moving Average: " + str(ma))
+    print("Last Price: " + str(last_price))
     if ma + 0.1 < last_price and not pos_held: # If MA is more than 10 cents under price, and we haven't already bought
             print("Buy")
             api.submit_order(
